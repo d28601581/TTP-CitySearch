@@ -1,25 +1,24 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios';
+import SearchBar from './Components/SearchBar';
+import ZipCode from './Components/ZipCode';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = { zipcode: [] }
+  onSearchSubmit = async (term) => {
+    const response = await axios.get(`http://ctp-zip-api.herokuapp.com/city/${term}`);
+    this.setState({ zipcode: response.data })
+    console.log(this.state.zipcode)
+  }
+  render() {
+    return (
+      <div>
+        <SearchBar onSubmit={this.onSearchSubmit} />
+        <ZipCode zipcode = {this.state.zipcode} />
+      </div>
+    );
+  }
 }
 
 export default App;
